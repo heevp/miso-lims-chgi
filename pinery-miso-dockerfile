@@ -1,14 +1,15 @@
-FROM maven:3.6.0-jdk-8-alpine as builder
+FROM maven:3.9.6-eclipse-temurin-17 AS builder
 COPY . /miso-lims/
 RUN cd /miso-lims && mvn clean package -q -B
 
-FROM tomcat:8-jre8-alpine
+FROM tomcat:10.1-jdk17-temurin
 COPY pinery-miso/docker/* /config/
 RUN rm -rf /usr/local/tomcat/webapps/ROOT \
  && mkdir -p /usr/local/tomcat/conf/Catalina/localhost/ \
  && ln -sf /config/ROOT.xml /usr/local/tomcat/conf/Catalina/localhost/ROOT.xml \
  && ln -sf /config/pinery-miso.properties /usr/local/tomcat/conf/Catalina/localhost/pinery-miso.properties
+
+ENV CATALINA_OPTS="-Dpinery.propertiesFile=file:/usr/local/tomcat/conf/Catalina/localhost/pinery-miso.properties"
 COPY --from=builder /miso-lims/pinery-miso/target/*.war /usr/local/tomcat/webapps/ROOT.war
 EXPOSE 8080
 CMD ["catalina.sh", "run"]
-
