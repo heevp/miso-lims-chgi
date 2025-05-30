@@ -46,12 +46,14 @@ Install required dependencies:
 
 
 Download and extract the `.docker` directory from Github into `miso-lims-compose`.
+Replace the archived miso-lims-compose/demo.detailed.yml file with the version provided here. 
 
 ```
 wget https://github.com/miso-lims/miso-lims/archive/master.zip
 unzip master.zip 'miso-lims-master/.docker/*'
 mv miso-lims-master/.docker miso-lims-compose
 rm -r master.zip miso-lims-master/
+cp demo.detailed.yml miso-lims-compose/demo.detailed.yml
 ```
 
 You are now ready to run MISO.
